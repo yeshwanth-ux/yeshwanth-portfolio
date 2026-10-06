@@ -15,7 +15,7 @@ const metrics = [
 export default function HeroPremium() {
   const heroRef = useRef(null);
   const canvasRef = useRef(null);
-  const scrambleRef = useRef(null);
+
 
   useEffect(() => {
     const node = heroRef.current;
@@ -153,46 +153,6 @@ export default function HeroPremium() {
     };
   }, []);
 
-  useEffect(() => {
-    const node = scrambleRef.current;
-    if (!node || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-
-    const target = node.dataset.text;
-    const symbols = "@!#$%^&";
-    let scrambleTimer;
-
-    const scramble = () => {
-      clearInterval(scrambleTimer);
-      let step = 0;
-      node.classList.add("is-scrambling");
-      scrambleTimer = window.setInterval(() => {
-        node.textContent = target
-          .split("")
-          .map((letter, index) => (
-            letter === " " || index < step / 2
-              ? letter
-              : symbols[Math.floor(Math.random() * symbols.length)]
-          ))
-          .join("");
-        step += 1;
-        if (step > target.length * 2) {
-          clearInterval(scrambleTimer);
-          node.textContent = target;
-          node.classList.remove("is-scrambling");
-        }
-      }, 55);
-    };
-
-    const initialTimer = window.setTimeout(scramble, 900);
-    const replayTimer = window.setInterval(scramble, 6500);
-    node.addEventListener("pointerenter", scramble);
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(replayTimer);
-      clearInterval(scrambleTimer);
-      node.removeEventListener("pointerenter", scramble);
-    };
-  }, []);
 
   return (
     <section ref={heroRef} id="hero" className="hero">
@@ -202,7 +162,7 @@ export default function HeroPremium() {
           <div className="hero-kicker eyebrow">{profile.displayRole}</div>
           <h1 className="hero-title">
             Yeshwanth
-            <span ref={scrambleRef} className="scramble" data-text="Reddy Bujula">Reddy Bujula</span>
+            <span>Reddy Bujula</span>
           </h1>
           <p className="hero-role">I turn complex data into reliable analysis and decision-ready insight.</p>
           <p className="hero-positioning">{profile.positioning}</p>
